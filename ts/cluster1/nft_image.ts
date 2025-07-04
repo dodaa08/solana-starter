@@ -1,4 +1,4 @@
-import wallet from "../turbin3-wallet.json"
+import wallet from "./wallet/turbin3-wallet.json"
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults"
 import { createGenericFile, createSignerFromKeypair, signerIdentity } from "@metaplex-foundation/umi"
 import { irysUploader } from "@metaplex-foundation/umi-uploader-irys"
@@ -19,12 +19,20 @@ umi.use(signerIdentity(signer));
         //2. Convert image to generic file.
         //3. Upload image
 
-        // const image = ???
+        const image = await readFile("./jeff.png");
 
-        // const [myUri] = ??? 
-        // console.log("Your image URI: ", myUri);
+        const genericFile = await createGenericFile(image, "jeff.png", {
+            contentType : "image/png"
+        })
+
+        const [myUri] = await umi.uploader.upload([genericFile])
+        console.log("Your image URI: ", myUri);
     }
     catch(error) {
         console.log("Oops.. Something went wrong", error);
     }
 })();
+
+
+// image URI : https://gateway.irys.xyz/8qnM4nvUX9jNe8ufLnGTSPxaS44cMwL3B5Vj2hhww6Ny
+// https://gateway.irys.xyz/2Cjtpc2DoTJNvhFSobHaSFnz9eP2HKwedNHFcaDTgqbp
